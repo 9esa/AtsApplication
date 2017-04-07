@@ -18,6 +18,7 @@ public class DriverViewInformation {
 
                ArrayList<DriverEntity> listOfDrivers = (ArrayList<DriverEntity>) Main.getSession().createCriteria(DriverEntity.class).list();
 
+
                public int getRowCount() {
                    return listOfDrivers.size();
                }
@@ -29,7 +30,7 @@ public class DriverViewInformation {
                public Object getValueAt(int rowIndex, int columnIndex) {
                    DriverEntity p = listOfDrivers.get(rowIndex);
                    Object[] values=new Object[]{p.getId(),p.getName(),p.getSecondName(),
-                           p.getBornDate(),p.getSipLineId()};
+                           p.getPhone(),p.getSipLineId()};
                    return values[columnIndex];
                }
 

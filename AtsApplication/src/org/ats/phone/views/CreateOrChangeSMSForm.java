@@ -4,29 +4,34 @@ import org.ats.phone.Main;
 import org.ats.phone.dao.LinkSmsEntity;
 import org.ats.phone.mao.SmsViewInformation;
 import org.ats.phone.utils.Constant;
-import org.ats.phone.utils.HibernateSessionFactory;
 import org.hibernate.Session;
 
 import javax.swing.*;
 import java.awt.event.*;
+import java.util.ArrayList;
 import java.util.Calendar;
 
-import static org.ats.phone.Main.oOrdersView;
-
-public class CreateSMSForm extends JDialog {
+public class CreateOrChangeSMSForm extends JDialog {
     private JPanel contentPane;
     private JButton buttonOK;
     private JButton buttonCancel;
     private JTextField smsText;
+    private boolean change;
 
-    public CreateSMSForm() {
+    public CreateOrChangeSMSForm(boolean change) {
 
         this.setSize(400, 150);
-        this.setLocationRelativeTo(Main.oOrdersView);
+        this.setLocationRelativeTo(OrdersView.getInstance());
         setContentPane(contentPane);
         setModal(true);
         getRootPane().setDefaultButton(buttonOK);
-        setTitle(Constant.TITLE_CREATE_SMS);
+        this.change = change;
+
+        if (change){
+            setTitle(Constant.TITLE_CHANGE_SMS);
+        } else {
+            setTitle(Constant.TITLE_CREATE_SMS);
+        }
 
         buttonOK.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -58,19 +63,29 @@ public class CreateSMSForm extends JDialog {
 
     private void onOK() {
 
-        Session session = HibernateSessionFactory.getSessionFactory().openSession();
+        Session session = Main.getSession();
         session.beginTransaction();
-        LinkSmsEntity smsEntity = new LinkSmsEntity();
-        smsEntity.setMessage(smsText.getText());
-        smsEntity.setCreationDate(Calendar.getInstance().getTime());
+        LinkSmsEntity smsEntity;
+
+        if (change) {
+            ArrayList<LinkSmsEntity> smsList = (ArrayList<LinkSmsEntity>) (session.createCriteria(LinkSmsEntity.class).list());
+            smsEntity = smsList.get(OrdersView.getInstance().row);
+
+            smsEntity.setMessage(smsText.getText());
+            smsEntity.setCreationDate(Calendar.getInstance().getTime());
+
+        } else {
+            smsEntity = new LinkSmsEntity();
+
+            smsEntity.setMessage(smsText.getText());
+            smsEntity.setCreationDate(Calendar.getInstance().getTime());
+        }
 
         session.save(smsEntity);
         session.getTransaction().commit();
 
-        session.close();
-
         SmsViewInformation oSmsViewInformation = new SmsViewInformation();
-        oSmsViewInformation.loadSmsInformation(oOrdersView.jSmsTable);
+        oSmsViewInformation.loadSmsInformation(OrdersView.getInstance().getJSmsTable());
 
         dispose();
 
@@ -81,10 +96,10 @@ public class CreateSMSForm extends JDialog {
         dispose();
     }
 
-    public static void main(String[] args) {
-        CreateSMSForm dialog = new CreateSMSForm();
-        dialog.pack();
-        dialog.setVisible(true);
-        System.exit(0);
-    }
+//    public static void main(String[] args) {
+//        CreateOrChangeSMSForm dialog = new CreateOrChangeSMSForm();
+//        dialog.pack();
+//        dialog.setVisible(true);
+//        System.exit(0);
+//    }
 }

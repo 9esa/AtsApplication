@@ -1,7 +1,6 @@
 package org.ats.phone.dao;
 
 import javax.persistence.*;
-import java.sql.Date;
 import java.util.Collection;
 
 /**

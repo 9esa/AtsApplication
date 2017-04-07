@@ -1,12 +1,15 @@
 package org.ats.phone.views;
 
 import com.toedter.calendar.JDateChooser;
+import org.ats.phone.Main;
 import org.ats.phone.dao.DriverEntity;
 import org.ats.phone.utils.Constant;
-import org.ats.phone.utils.HibernateSessionFactory;
+import org.ats.phone.utils.SmsConnectionService;
 import org.hibernate.Session;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
-import javax.accessibility.AccessibleComponent;
 import javax.swing.*;
 import java.awt.event.*;
 
@@ -15,15 +18,16 @@ public class CreateDriverForm extends JDialog {
     private JPanel contentPane;
     private JButton buttonOK;
     private JButton buttonCancel;
-    private JSpinner spinner;
     private JFormattedTextField phone;
     private JFormattedTextField secondName;
     private JFormattedTextField firstName;
     private JDateChooser jDatePicker;
+    private JSpinner spinnerSip;
 
     public CreateDriverForm() {
 
         this.setSize(500,170);
+        this.setLocationRelativeTo(OrdersView.getInstance());
 
         setResizable(false);
         setTitle(Constant.TITLE_CREATE_DRIVER);
@@ -61,7 +65,7 @@ public class CreateDriverForm extends JDialog {
 
     private void onOK() {
 //todo Ожидание одобрение подписи
-//          new SmsConnectionService().getInterfaceRegistrationCode()
+//            new SmsConnectionService().getInterfaceRegistrationCode()
 //                    .smsNotification(Constant.I_ID_SMS_SERVICE, Constant.KEY_SMS_SERVICE, "89818926024", Constant.SIGNATURE_SMS_SERVICE,"mess")
 //                    .enqueue(new Callback<String>() {
 //                        public void onResponse(Call<String> call, Response<String> response) {
@@ -72,18 +76,19 @@ public class CreateDriverForm extends JDialog {
 //                        }
 //                    });
 // Запись в базу данных нового водителя
-        Session session = HibernateSessionFactory.getSessionFactory().openSession();
+
+        Session session = Main.getSession();
         session.beginTransaction();
+
         DriverEntity driverEntity = new DriverEntity();
         driverEntity.setName(firstName.getText());
         driverEntity.setSecondName(secondName.getText());
         driverEntity.setPhone(phone.getText());
+        driverEntity.setSipLineId(spinnerSip.getComponentCount());
         driverEntity.setBornDate(jDatePicker.getDate());
 
         session.save(driverEntity);
         session.getTransaction().commit();
-
-        session.close();
 
         dispose();
     }
@@ -93,14 +98,11 @@ public class CreateDriverForm extends JDialog {
         dispose();
     }
 
-    public static void main(String[] args) {
-        CreateDriverForm dialog = new CreateDriverForm();
-        dialog.pack();
-        dialog.setVisible(true);
-        System.exit(0);
-    }
+//    public static void main(String[] args) {
+//        CreateDriverForm dialog = new CreateDriverForm();
+//        dialog.pack();
+//        dialog.setVisible(true);
+//        System.exit(0);
+//    }
 
-    public CreateDriverForm setData() {
-        return this;
-    }
 }

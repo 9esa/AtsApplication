@@ -10,13 +10,12 @@ import java.util.Collection;
 @Table(name = "link_sms", schema = "db_ats_app", catalog = "")
 public class LinkSmsEntity {
     private int id;
-    private byte first;
-    private byte second;
-    private byte third;
+    private String message;
+    private java.util.Date creationDate;
     private Collection<OrderEntity> ordersById;
 
     @Id
-    @Column(name = "id")
+    @Column(name = "Id")
     public int getId() {
         return id;
     }
@@ -26,33 +25,21 @@ public class LinkSmsEntity {
     }
 
     @Basic
-    @Column(name = "first")
-    public byte getFirst() {
-        return first;
+    @Column(name = "Message")
+    public String getMessage() {
+        return message;
     }
 
-    public void setFirst(byte first) {
-        this.first = first;
+    public void setMessage(String message) {
+        this.message = message;
     }
 
-    @Basic
-    @Column(name = "second")
-    public byte getSecond() {
-        return second;
-    }
+    @Temporal(TemporalType.DATE)
+    @Column(name = "CreationDate")
+    public java.util.Date getCreationDate() { return creationDate; }
 
-    public void setSecond(byte second) {
-        this.second = second;
-    }
-
-    @Basic
-    @Column(name = "third")
-    public byte getThird() {
-        return third;
-    }
-
-    public void setThird(byte third) {
-        this.third = third;
+    public void setCreationDate(java.util.Date creationDate) {
+        this.creationDate = creationDate;
     }
 
     @Override
@@ -63,9 +50,8 @@ public class LinkSmsEntity {
         LinkSmsEntity that = (LinkSmsEntity) o;
 
         if (id != that.id) return false;
-        if (first != that.first) return false;
-        if (second != that.second) return false;
-        if (third != that.third) return false;
+        if (message != null ? !message.equals(that.message) : that.message != null) return false;
+        if (creationDate != null ? !creationDate.equals(that.creationDate) : that.creationDate != null) return false;
 
         return true;
     }
@@ -73,9 +59,8 @@ public class LinkSmsEntity {
     @Override
     public int hashCode() {
         int result = id;
-        result = 31 * result + (int) first;
-        result = 31 * result + (int) second;
-        result = 31 * result + (int) third;
+        result = 31 * result + (message != null ? message.hashCode() : 0);
+        result = 31 * result + (creationDate != null ? creationDate.hashCode() : 0);
         return result;
     }
 
