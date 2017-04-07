@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<!--<hibernate-configuration>-->
+    <!--<session-factory>-->
+        <!--<property name="connection.url"/>-->
+        <!--<property name="connection.driver_class"/>-->
+        <!--&lt;!&ndash; <property name="connection.username"/> &ndash;&gt;-->
+        <!--&lt;!&ndash; <property name="connection.password"/> &ndash;&gt;-->
+
+        <!--&lt;!&ndash; DB schema will be updated if needed &ndash;&gt;-->
+        <!--&lt;!&ndash; <property name="hbm2ddl.auto">update</property> &ndash;&gt;-->
+    <!--</session-factory>-->
+
+
+    <hibernate-configuration>
+        <session-factory>
+            <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+            <property name="connection.url">jdbc:mysql://localhost:3306/db_ats_app</property>
+            <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
+
+            <property name="hibernate.connection.CharSet">utf8</property>
+            <property name="hibernate.connection.characterEncoding">utf8</property>
+            <property name="hibernate.connection.useUnicode">true</property>
+
+            <!-- NOTE that after automapping with IDEA property username and password will delete -->
+            <!--and will be:  Initial SessionFactory failedorg.hibernate.service.spi.ServiceException: Unable to create requested service-->
+            <property name="connection.username">Denis</property>
+            <property name="connection.password">8926024</property>
+            <!-- NOTE that after automapping with IDEA property username and password will delete -->
+            <mapping class="org.ats.phone.dao.DriverEntity"/>
+            <mapping class="org.ats.phone.dao.LinkSmsEntity"/>
+            <mapping class="org.ats.phone.dao.OrderEntity"/>
+            <mapping class="org.ats.phone.dao.StatusEntity"/>
+            <mapping class="org.ats.phone.dao.TradeEntity"/>
+            <mapping class="org.ats.phone.dao.UserEntity"/>
+            <!-- DB schema will be updated if needed -->
+            <!-- <property name="hbm2ddl.auto">update</property> -->
+        </session-factory>
+    </hibernate-configuration>
+
+
+<!--</hibernate-configuration>-->
