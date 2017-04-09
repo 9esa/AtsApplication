@@ -69,7 +69,7 @@ public class CreateOrChangeSMSForm extends JDialog {
 
         if (change) {
             ArrayList<LinkSmsEntity> smsList = (ArrayList<LinkSmsEntity>) (session.createCriteria(LinkSmsEntity.class).list());
-            smsEntity = smsList.get(OrdersView.getInstance().row);
+            smsEntity = smsList.get(OrdersView.getInstance().getRow());
 
             smsEntity.setMessage(smsText.getText());
             smsEntity.setCreationDate(Calendar.getInstance().getTime());

@@ -1,5 +1,6 @@
 package org.ats.phone.views;
 
+import net.sf.ehcache.search.expression.Or;
 import org.ats.phone.Main;
 import org.ats.phone.dao.LinkSmsEntity;
 import org.ats.phone.mao.SmsViewInformation;
@@ -11,8 +12,6 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.util.Calendar;
 
-import static org.ats.phone.Main.oOrdersView;
-
 public class CreateSMSForm extends JDialog {
     private JPanel contentPane;
     private JButton buttonOK;
@@ -22,7 +21,7 @@ public class CreateSMSForm extends JDialog {
     public CreateSMSForm() {
 
         this.setSize(400, 150);
-        this.setLocationRelativeTo(Main.oOrdersView);
+        this.setLocationRelativeTo(OrdersView.getInstance());
         setContentPane(contentPane);
         setModal(true);
         getRootPane().setDefaultButton(buttonOK);
@@ -70,7 +69,7 @@ public class CreateSMSForm extends JDialog {
         session.close();
 
         SmsViewInformation oSmsViewInformation = new SmsViewInformation();
-        oSmsViewInformation.loadSmsInformation(oOrdersView.jSmsTable);
+        oSmsViewInformation.loadSmsInformation(OrdersView.getInstance().getJSmsTable());
 
         dispose();
 

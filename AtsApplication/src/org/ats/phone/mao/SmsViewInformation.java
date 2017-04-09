@@ -19,7 +19,6 @@ public class SmsViewInformation {
 
             ArrayList<LinkSmsEntity> smsList = (ArrayList<LinkSmsEntity>) Main.getSession().createCriteria(LinkSmsEntity.class).list();
 
-
             public int getRowCount() {
                 return smsList.size();
             }

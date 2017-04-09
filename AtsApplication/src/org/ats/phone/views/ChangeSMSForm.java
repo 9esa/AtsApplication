@@ -1,6 +1,5 @@
 package org.ats.phone.views;
 
-import org.ats.phone.Main;
 import org.ats.phone.dao.LinkSmsEntity;
 import org.ats.phone.mao.SmsViewInformation;
 import org.ats.phone.utils.Constant;
@@ -12,7 +11,6 @@ import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-import static org.ats.phone.Main.oOrdersView;
 
 public class ChangeSMSForm extends JDialog{
 
@@ -24,7 +22,7 @@ public class ChangeSMSForm extends JDialog{
     public ChangeSMSForm() {
 
         this.setSize(400, 150);
-        this.setLocationRelativeTo(oOrdersView);
+        this.setLocationRelativeTo(OrdersView.getInstance());
         setContentPane(contentPane);
         setModal(true);
         getRootPane().setDefaultButton(buttonOK);
@@ -57,7 +55,7 @@ public class ChangeSMSForm extends JDialog{
             }
         }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
 
-        smsText.setText((String) oOrdersView.jSmsTable.getValueAt(oOrdersView.row, 1));
+        smsText.setText((String) OrdersView.getInstance().getJSmsTable().getValueAt(OrdersView.getInstance().row, 1));
 
     }
 
@@ -66,7 +64,7 @@ public class ChangeSMSForm extends JDialog{
         Session session = HibernateSessionFactory.getSessionFactory().openSession();
 
         ArrayList<LinkSmsEntity> smsList = (ArrayList<LinkSmsEntity>) (session.createCriteria(LinkSmsEntity.class).list());
-        LinkSmsEntity smsEntity = smsList.get(oOrdersView.row);
+        LinkSmsEntity smsEntity = smsList.get(OrdersView.getInstance().row);
 
         session.beginTransaction();
         smsEntity.setMessage(smsText.getText());
@@ -78,7 +76,7 @@ public class ChangeSMSForm extends JDialog{
         session.close();
 
         SmsViewInformation oSmsViewInformation = new SmsViewInformation();
-        oSmsViewInformation.loadSmsInformation(oOrdersView.jSmsTable);
+        oSmsViewInformation.loadSmsInformation(OrdersView.getInstance().getJSmsTable());
 
         dispose();
 
