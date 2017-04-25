@@ -1,11 +1,9 @@
 package org.ats.phone.views;
 
-import net.sf.ehcache.search.expression.Or;
 import org.ats.phone.Main;
 import org.ats.phone.dao.LinkSmsEntity;
 import org.ats.phone.mao.SmsViewInformation;
 import org.ats.phone.utils.Constant;
-import org.ats.phone.utils.HibernateSessionFactory;
 import org.hibernate.Session;
 
 import javax.swing.*;
@@ -57,7 +55,7 @@ public class CreateSMSForm extends JDialog {
 
     private void onOK() {
 
-        Session session = HibernateSessionFactory.getSessionFactory().openSession();
+        Session session = Main.getSession();
         session.beginTransaction();
         LinkSmsEntity smsEntity = new LinkSmsEntity();
         smsEntity.setMessage(smsText.getText());

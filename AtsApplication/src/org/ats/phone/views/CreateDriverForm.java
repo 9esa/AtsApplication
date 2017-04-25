@@ -84,7 +84,6 @@ public class CreateDriverForm extends JDialog {
         driverEntity.setName(firstName.getText());
         driverEntity.setSecondName(secondName.getText());
         driverEntity.setPhone(phone.getText());
-        driverEntity.setSipLineId(spinnerSip.getComponentCount());
         driverEntity.setBornDate(jDatePicker.getDate());
 
         session.save(driverEntity);

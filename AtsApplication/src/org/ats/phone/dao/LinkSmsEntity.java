@@ -1,27 +1,37 @@
 package org.ats.phone.dao;
 
 import javax.persistence.*;
-import java.util.Collection;
+import java.util.Date;
 
 /**
- * Created by user on 12.03.17.
+ * Created by user on 11.04.17.
  */
 @Entity
 @Table(name = "link_sms", schema = "db_ats_app", catalog = "")
 public class LinkSmsEntity {
-    private int id;
+    private Integer id;
+    private Date creationDate;
     private String message;
-    private java.util.Date creationDate;
-    private Collection<OrderEntity> ordersById;
 
     @Id
-    @Column(name = "Id")
-    public int getId() {
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
+    }
+
+    @Basic
+    @Column(name = "creationDate")
+    public Date getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
     }
 
     @Basic
@@ -34,14 +44,6 @@ public class LinkSmsEntity {
         this.message = message;
     }
 
-    @Temporal(TemporalType.DATE)
-    @Column(name = "CreationDate")
-    public java.util.Date getCreationDate() { return creationDate; }
-
-    public void setCreationDate(java.util.Date creationDate) {
-        this.creationDate = creationDate;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -49,27 +51,18 @@ public class LinkSmsEntity {
 
         LinkSmsEntity that = (LinkSmsEntity) o;
 
-        if (id != that.id) return false;
-        if (message != null ? !message.equals(that.message) : that.message != null) return false;
+        if (id != null ? !id.equals(that.id) : that.id != null) return false;
         if (creationDate != null ? !creationDate.equals(that.creationDate) : that.creationDate != null) return false;
+        if (message != null ? !message.equals(that.message) : that.message != null) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = id;
-        result = 31 * result + (message != null ? message.hashCode() : 0);
+        int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (creationDate != null ? creationDate.hashCode() : 0);
+        result = 31 * result + (message != null ? message.hashCode() : 0);
         return result;
-    }
-
-    @OneToMany(mappedBy = "linkSmsByLinkSmsId")
-    public Collection<OrderEntity> getOrdersById() {
-        return ordersById;
-    }
-
-    public void setOrdersById(Collection<OrderEntity> ordersById) {
-        this.ordersById = ordersById;
     }
 }

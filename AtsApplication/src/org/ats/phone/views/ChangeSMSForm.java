@@ -55,7 +55,7 @@ public class ChangeSMSForm extends JDialog{
             }
         }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
 
-        smsText.setText((String) OrdersView.getInstance().getJSmsTable().getValueAt(OrdersView.getInstance().row, 1));
+        smsText.setText((String) OrdersView.getInstance().getJSmsTable().getValueAt(OrdersView.getInstance().getiSmsRow(), 1));
 
     }
 
@@ -64,7 +64,7 @@ public class ChangeSMSForm extends JDialog{
         Session session = HibernateSessionFactory.getSessionFactory().openSession();
 
         ArrayList<LinkSmsEntity> smsList = (ArrayList<LinkSmsEntity>) (session.createCriteria(LinkSmsEntity.class).list());
-        LinkSmsEntity smsEntity = smsList.get(OrdersView.getInstance().row);
+        LinkSmsEntity smsEntity = smsList.get(OrdersView.getInstance().getiSmsRow());
 
         session.beginTransaction();
         smsEntity.setMessage(smsText.getText());

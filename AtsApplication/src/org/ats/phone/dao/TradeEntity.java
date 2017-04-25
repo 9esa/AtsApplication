@@ -1,29 +1,30 @@
 package org.ats.phone.dao;
 
 import javax.persistence.*;
-import java.sql.Date;
+import java.util.Date;
 import java.util.Collection;
 
 /**
- * Created by user on 12.03.17.
+ * Created by user on 11.04.17.
  */
 @Entity
 @Table(name = "trade", schema = "db_ats_app", catalog = "")
 public class TradeEntity {
-    private int id;
+    private Integer id;
     private Date dateOfCreate;
     private Date dateOfTrade;
-    private int salary;
-    private int sale;
-    private Collection<OrderEntity> ordersById;
+    private Integer salary;
+    private Integer sale;
+    private Collection<TradeOrderEntity> tradeOrdersById;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Id")
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -49,21 +50,21 @@ public class TradeEntity {
 
     @Basic
     @Column(name = "Salary")
-    public int getSalary() {
+    public Integer getSalary() {
         return salary;
     }
 
-    public void setSalary(int salary) {
+    public void setSalary(Integer salary) {
         this.salary = salary;
     }
 
     @Basic
     @Column(name = "Sale")
-    public int getSale() {
+    public Integer getSale() {
         return sale;
     }
 
-    public void setSale(int sale) {
+    public void setSale(Integer sale) {
         this.sale = sale;
     }
 
@@ -74,31 +75,31 @@ public class TradeEntity {
 
         TradeEntity that = (TradeEntity) o;
 
-        if (id != that.id) return false;
-        if (salary != that.salary) return false;
-        if (sale != that.sale) return false;
+        if (id != null ? !id.equals(that.id) : that.id != null) return false;
         if (dateOfCreate != null ? !dateOfCreate.equals(that.dateOfCreate) : that.dateOfCreate != null) return false;
         if (dateOfTrade != null ? !dateOfTrade.equals(that.dateOfTrade) : that.dateOfTrade != null) return false;
+        if (salary != null ? !salary.equals(that.salary) : that.salary != null) return false;
+        if (sale != null ? !sale.equals(that.sale) : that.sale != null) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = id;
+        int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (dateOfCreate != null ? dateOfCreate.hashCode() : 0);
         result = 31 * result + (dateOfTrade != null ? dateOfTrade.hashCode() : 0);
-        result = 31 * result + salary;
-        result = 31 * result + sale;
+        result = 31 * result + (salary != null ? salary.hashCode() : 0);
+        result = 31 * result + (sale != null ? sale.hashCode() : 0);
         return result;
     }
 
     @OneToMany(mappedBy = "tradeByTradeId")
-    public Collection<OrderEntity> getOrdersById() {
-        return ordersById;
+    public Collection<TradeOrderEntity> getTradeOrdersById() {
+        return tradeOrdersById;
     }
 
-    public void setOrdersById(Collection<OrderEntity> ordersById) {
-        this.ordersById = ordersById;
+    public void setTradeOrdersById(Collection<TradeOrderEntity> tradeOrdersById) {
+        this.tradeOrdersById = tradeOrdersById;
     }
 }

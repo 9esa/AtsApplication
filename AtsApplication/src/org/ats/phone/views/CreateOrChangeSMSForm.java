@@ -4,6 +4,7 @@ import org.ats.phone.Main;
 import org.ats.phone.dao.LinkSmsEntity;
 import org.ats.phone.mao.SmsViewInformation;
 import org.ats.phone.utils.Constant;
+import org.ats.phone.utils.IOnClickOk;
 import org.hibernate.Session;
 
 import javax.swing.*;
@@ -18,6 +19,8 @@ public class CreateOrChangeSMSForm extends JDialog {
     private JTextField smsText;
     private boolean change;
 
+    private IOnClickOk iOnClickOk;
+
     public CreateOrChangeSMSForm(boolean change) {
 
         this.setSize(400, 150);
@@ -27,7 +30,7 @@ public class CreateOrChangeSMSForm extends JDialog {
         getRootPane().setDefaultButton(buttonOK);
         this.change = change;
 
-        if (change){
+        if (change) {
             setTitle(Constant.TITLE_CHANGE_SMS);
         } else {
             setTitle(Constant.TITLE_CREATE_SMS);
@@ -69,8 +72,7 @@ public class CreateOrChangeSMSForm extends JDialog {
 
         if (change) {
             ArrayList<LinkSmsEntity> smsList = (ArrayList<LinkSmsEntity>) (session.createCriteria(LinkSmsEntity.class).list());
-            smsEntity = smsList.get(OrdersView.getInstance().getRow());
-
+            smsEntity = smsList.get(OrdersView.getInstance().getiSmsRow());
             smsEntity.setMessage(smsText.getText());
             smsEntity.setCreationDate(Calendar.getInstance().getTime());
 
@@ -84,11 +86,14 @@ public class CreateOrChangeSMSForm extends JDialog {
         session.save(smsEntity);
         session.getTransaction().commit();
 
-        SmsViewInformation oSmsViewInformation = new SmsViewInformation();
-        oSmsViewInformation.loadSmsInformation(OrdersView.getInstance().getJSmsTable());
+        iOnClickOk.onClickOk();
 
         dispose();
 
+    }
+
+    public void setiOnClickOk(IOnClickOk iOnClickOk) {
+        this.iOnClickOk = iOnClickOk;
     }
 
     private void onCancel() {
@@ -96,10 +101,4 @@ public class CreateOrChangeSMSForm extends JDialog {
         dispose();
     }
 
-//    public static void main(String[] args) {
-//        CreateOrChangeSMSForm dialog = new CreateOrChangeSMSForm();
-//        dialog.pack();
-//        dialog.setVisible(true);
-//        System.exit(0);
-//    }
 }

@@ -1,18 +1,13 @@
 package org.ats.phone;
 
-import org.ats.phone.dao.DriverEntity;
-import org.ats.phone.dao.StatusEntity;
 import org.ats.phone.utils.AtsService;
-import org.ats.phone.utils.HibernateSessionFactory;
+import org.ats.phone.utils.SmsService;
 import org.ats.phone.views.OrdersView;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import java.util.List;
 
 /**
  * Created by user on 26.02.17.
@@ -24,6 +19,7 @@ public class Main {
     static {
         try {
             Configuration configuration = new Configuration();
+            configuration.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQLInnoDBDialect");
             configuration.configure();
 
             ourSessionFactory = configuration.buildSessionFactory();
@@ -38,8 +34,11 @@ public class Main {
 
     public static void main(final String[] args) throws Exception {
 
-        new OrdersView();
-        new AtsService().startService();
+        OrdersView.getInstance();
+        new AtsService().startServiceClient();
+        new AtsService().startServiceWhoCalls();
+        new AtsService().startServiceDriver();
+        new SmsService().startWatcher();
 
 
 //        final Session session = getSession();

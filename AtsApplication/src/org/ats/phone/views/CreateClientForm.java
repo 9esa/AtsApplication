@@ -1,11 +1,10 @@
 package org.ats.phone.views;
 
 import com.toedter.calendar.JDateChooser;
-import org.ats.phone.dao.UserEntity;
+import org.ats.phone.dao.ClientEntity;
+import org.ats.phone.utils.Constant;
 import org.ats.phone.utils.HibernateSessionFactory;
 import org.hibernate.Session;
-import sun.util.calendar.BaseCalendar;
-import sun.util.calendar.CalendarDate;
 
 import javax.swing.*;
 import java.awt.event.*;
@@ -18,14 +17,24 @@ public class CreateClientForm extends JDialog {
     private JTextField tvFio;
     private JDateChooser jDatePicker;
     private JFormattedTextField tvPhone;
+    private JComboBox cbAddressOrder;
+    private JTextField textField1;
+    private JButton btnCreateOrder;
+    private JButton btnAddAddress;
+    private JButton удалитьАдресButton;
     private JTextPane tvAddress;
 
-    public CreateClientForm() {
+    private boolean bChanged;
 
+    public CreateClientForm(boolean bChanged) {
+
+        this.bChanged = bChanged;
         this.setSize(550,250);
+        this.setLocationRelativeTo(OrdersView.getInstance());
 
         setResizable(false);
 
+        setTitle(Constant.TITLE_CREATE_CUSTOMER);
         setContentPane(contentPane);
         setModal(true);
         getRootPane().setDefaultButton(buttonOK);
@@ -63,9 +72,9 @@ public class CreateClientForm extends JDialog {
 
         Session session = HibernateSessionFactory.getSessionFactory().openSession();
         session.beginTransaction();
-        UserEntity userEntity = new UserEntity();
-        userEntity.setName(tvFio.getText());
-        userEntity.setPhone(tvPhone.getText().toString());
+        ClientEntity userEntity = new ClientEntity();
+        userEntity.setUserFio(tvFio.getText());
+        userEntity.setPhoneNumber(tvPhone.getText().toString());
         userEntity.setAddress(tvAddress.getText().toString());
         userEntity.setBornDate(jDatePicker.getDate());
         userEntity.setDateOfCreate(new Date());
@@ -95,13 +104,6 @@ public class CreateClientForm extends JDialog {
 
             dispose();
 
-    }
-
-    public static void main(String[] args) {
-        CreateClientForm dialog = new CreateClientForm();
-        dialog.pack();
-        dialog.setVisible(true);
-        System.exit(0);
     }
 
 }

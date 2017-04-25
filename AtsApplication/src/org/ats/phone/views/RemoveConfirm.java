@@ -5,22 +5,25 @@ import org.ats.phone.dao.LinkSmsEntity;
 import org.ats.phone.mao.SmsViewInformation;
 import org.ats.phone.utils.Constant;
 import org.ats.phone.utils.HibernateSessionFactory;
+import org.ats.phone.utils.IOnClickOk;
 import org.hibernate.Session;
 
 import javax.swing.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 
-public class RemoveSMSForm extends JDialog {
+public class RemoveConfirm extends JDialog {
 
     private JPanel contentPane;
     private JButton btnYes;
     private JButton btnNo;
     private JLabel labelMessage;
 
-    public RemoveSMSForm() {
+    private IOnClickOk iOnClickOk;
 
-        this.setSize(400, 150);
+    public RemoveConfirm(String sValue) {
+
+        this.setSize(600, 170);
         this.setLocationRelativeTo(OrdersView.getInstance());
         setContentPane(contentPane);
         setModal(true);
@@ -54,24 +57,12 @@ public class RemoveSMSForm extends JDialog {
             }
         }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
 
-        labelMessage.setText("Вы действительно хотите удалить сообщение: \"" + (String) OrdersView.getInstance().getJSmsTable().getValueAt(OrdersView.getInstance().row, 1) + "\"?");
+        labelMessage.setText(sValue);
 
     }
 
     private void onYes() {
-
-        Session session = Main.getSession();
-        session.beginTransaction();
-
-        ArrayList<LinkSmsEntity> smsList = (ArrayList<LinkSmsEntity>) (session.createCriteria(LinkSmsEntity.class).list());
-        LinkSmsEntity smsEntity = smsList.get(OrdersView.getInstance().row);
-
-        session.delete(smsEntity);
-        session.getTransaction().commit();
-
-        SmsViewInformation oSmsViewInformation = new SmsViewInformation();
-        oSmsViewInformation.loadSmsInformation(OrdersView.getInstance().getJSmsTable());
-
+        iOnClickOk.onClickOk();
         dispose();
 
     }
@@ -81,11 +72,8 @@ public class RemoveSMSForm extends JDialog {
         dispose();
     }
 
-//    public static void main(String[] args) {
-//        RemoveSMSForm dialog = new RemoveSMSForm();
-//        dialog.pack();
-//        dialog.setVisible(true);
-//        System.exit(0);
-//    }
 
+    public void setiOnClickOk(IOnClickOk iOnClickOk) {
+        this.iOnClickOk = iOnClickOk;
+    }
 }

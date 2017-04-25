@@ -1,29 +1,31 @@
 package org.ats.phone.dao;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.Collection;
 
 /**
- * Created by user on 12.03.17.
+ * Created by user on 11.04.17.
  */
 @Entity
 @Table(name = "driver", schema = "db_ats_app", catalog = "")
 public class DriverEntity {
-    private int id;
+    private Integer id;
     private String name;
     private String secondName;
     private String phone;
-    private int sipLineId;
-    private java.util.Date bornDate;
-    private Collection<OrderEntity> ordersById;
+    private Integer sipLineId;
+    private Date bornDate;
+    private Collection<TradeOrderEntity> tradeOrdersById;
 
     @Id
     @Column(name = "Id")
-    public int getId() {
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -59,21 +61,21 @@ public class DriverEntity {
 
     @Basic
     @Column(name = "SipLineId")
-    public int getSipLineId() {
+    public Integer getSipLineId() {
         return sipLineId;
     }
 
-    public void setSipLineId(int sipLineId) {
+    public void setSipLineId(Integer sipLineId) {
         this.sipLineId = sipLineId;
     }
 
-    @Temporal(TemporalType.DATE)
+    @Basic
     @Column(name = "BornDate")
-    public java.util.Date getBornDate() {
+    public Date getBornDate() {
         return bornDate;
     }
 
-    public void setBornDate(java.util.Date bornDate) {
+    public void setBornDate(Date bornDate) {
         this.bornDate = bornDate;
     }
 
@@ -84,33 +86,38 @@ public class DriverEntity {
 
         DriverEntity that = (DriverEntity) o;
 
-        if (id != that.id) return false;
-        if (sipLineId != that.sipLineId) return false;
+        if (id != null ? !id.equals(that.id) : that.id != null) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
         if (secondName != null ? !secondName.equals(that.secondName) : that.secondName != null) return false;
         if (phone != null ? !phone.equals(that.phone) : that.phone != null) return false;
+        if (sipLineId != null ? !sipLineId.equals(that.sipLineId) : that.sipLineId != null) return false;
         if (bornDate != null ? !bornDate.equals(that.bornDate) : that.bornDate != null) return false;
 
         return true;
     }
 
     @Override
+    public String toString() {
+        return getName() + " " + getSecondName() + " " + getPhone() ;
+    }
+
+    @Override
     public int hashCode() {
-        int result = id;
+        int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (secondName != null ? secondName.hashCode() : 0);
         result = 31 * result + (phone != null ? phone.hashCode() : 0);
-        result = 31 * result + sipLineId;
+        result = 31 * result + (sipLineId != null ? sipLineId.hashCode() : 0);
         result = 31 * result + (bornDate != null ? bornDate.hashCode() : 0);
         return result;
     }
 
     @OneToMany(mappedBy = "driverByDriverId")
-    public Collection<OrderEntity> getOrdersById() {
-        return ordersById;
+    public Collection<TradeOrderEntity> getTradeOrdersById() {
+        return tradeOrdersById;
     }
 
-    public void setOrdersById(Collection<OrderEntity> ordersById) {
-        this.ordersById = ordersById;
+    public void setTradeOrdersById(Collection<TradeOrderEntity> tradeOrdersById) {
+        this.tradeOrdersById = tradeOrdersById;
     }
 }
